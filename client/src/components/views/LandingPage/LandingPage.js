@@ -9,18 +9,30 @@ import { Row } from 'antd';
 function LandingPage() {
     const [Movies, setMovies] = useState([]);
     const [MainMovieImage, setMainMovieImage] = useState(null);
+    const [CurrentPage, setCurrentPage] = useState(0)
 
     useEffect(()=>{
         const endpoint = `${API_URL}movie/popular?api_key=${API_KEY}&alnguage=en-US&page=1`;
+        fetchMovies(endpoint)
+        
+        // axios.get(endpoint).then(res=>console.log('test:',res))
+    },[])
 
+    const fetchMovies = (endpoint) => {
         fetch(endpoint)
         .then(response=>response.json())
         .then(response=>{
-            setMovies([...response.results])
-            setMainMovieImage(response.results[0])
+            setMovies([...Movies, ...response.results])
+            setMainMovieImage(MainMovieImage || response.results[0])
+            setCurrentPage(response.page)
         })
-        // axios.get(endpoint).then(res=>console.log('test:',res))
-    },[])
+    }
+
+    const loadMore = () => {
+        const endpoint = `${API_URL}movie/popular?api_key=${API_KEY}&alnguage=en-US&page=${CurrentPage+1}`;
+        fetchMovies(endpoint)
+    }
+
     return (
         <div style={{width:'100%', margin:'0'}}>
             {MainMovieImage && 
@@ -36,8 +48,9 @@ function LandingPage() {
                 <Row gutter={ [16,16] }>
                     { Movies && Movies.map((movie, index) => (
                         <React.Fragment key = {index}>
-                            <GridCards 
-                                image={movie.poster_path ? 
+                            <GridCards
+                                landingPage
+                                image={movie.poster_path ?
                                     `${IMAGE_BASE_URL}w500${movie.poster_path}` : null}
                                 movieId={movie.id}
                                 movieName={movie.original_title}
@@ -47,7 +60,7 @@ function LandingPage() {
                 </Row>
             </div>
             <div style={{display:'flex', justifyContent:'center'}}>
-                <button>Load More</button>
+                <button onClick={loadMore}>Load More</button>
             </div>
 
         </div>
