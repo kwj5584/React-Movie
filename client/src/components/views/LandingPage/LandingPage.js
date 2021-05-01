@@ -1,7 +1,7 @@
 import React,{useEffect, useState} from 'react'
 import { FaCode } from "react-icons/fa";
 import { API_KEY, API_URL, IMAGE_BASE_URL } from '../../Config';
-import axios from 'axios';
+// import axios from 'axios';
 import MainImage from './Sections/MainImage';
 import GridCards from '../commons/GridCards';
 import { Row } from 'antd';
