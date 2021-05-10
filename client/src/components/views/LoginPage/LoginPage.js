@@ -10,7 +10,7 @@ const { Title } = Typography;
 
 function LoginPage(props) {
   const dispatch = useDispatch();
-  const rememberMeChecked = localStorage.getItem("rememberMe") ? true : false;
+  const rememberMeChecked = sessionStorage.getItem("rememberMe") ? true : false;
 
   const [formErrorMessage, setFormErrorMessage] = useState('')
   const [rememberMe, setRememberMe] = useState(rememberMeChecked)
@@ -19,7 +19,7 @@ function LoginPage(props) {
     setRememberMe(!rememberMe)
   };
 
-  const initialEmail = localStorage.getItem("rememberMe") ? localStorage.getItem("rememberMe") : '';
+  const initialEmail = sessionStorage.getItem("rememberMe") ? sessionStorage.getItem("rememberMe") : '';
 
   return (
     <Formik
@@ -45,11 +45,11 @@ function LoginPage(props) {
           dispatch(loginUser(dataToSubmit))
             .then(response => {
               if (response.payload.loginSuccess) {
-                window.localStorage.setItem('userId', response.payload.userId);
+                window.sessionStorage.setItem('userId', response.payload.userId);
                 if (rememberMe === true) {
-                  window.localStorage.setItem('rememberMe', values.id);
+                  window.sessionStorage.setItem('rememberMe', values.email);
                 } else {
-                  localStorage.removeItem('rememberMe');
+                  sessionStorage.removeItem('rememberMe');
                 }
                 props.history.push("/");
               } else {

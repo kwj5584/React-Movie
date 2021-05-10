@@ -11,7 +11,7 @@ function FavoritePage() {
     }, [])
 
     const fetchFavoriteMovie = () =>{
-        Axios.post('/api/favorite/getFavoriteMovie',{ userFrom: localStorage.getItem('userId')})
+        Axios.post('/api/favorite/getFavoriteMovie',{ userFrom: sessionStorage.getItem('userId')})
             .then(res=>{
                 if(res.data.success){
                     console.log(res.data)
